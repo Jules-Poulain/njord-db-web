@@ -8,9 +8,6 @@ import os
 
 # Connect to the Viam API
 async def connect() -> ViamClient:
-    print("API_KEY_ID:", os.getenv("API_KEY_ID"))
-    print("API_KEY_SECRET:", os.getenv("API_KEY_SECRET"))
-    print("ORG_ID:", os.getenv("ORG_ID"))
     dial_options = DialOptions(
         credentials=Credentials(
             type="api-key",
