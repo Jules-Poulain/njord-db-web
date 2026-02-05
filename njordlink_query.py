@@ -23,24 +23,23 @@ async def get_latest_pgns():
     viam_client = await connect()
     data_client = viam_client.data_client
 
-    my_data = await data_client.tabular_data_by_mql(
+    records = await data_client.tabular_data_by_sql(
         organization_id=os.getenv("ORG_ID"),
-        query=[
-            {
-                "$match": {
-                    "component_name": "all-pgn",
-                    "component_type": "rdk:component:sensor",
-                    "method_name": "Readings",
-                    "data.readings": {"$ne": {}}
-                }
-            },
-            {"$sort": {"time_received": -1}},
-            {"$limit": 1}
-        ],
+        sql_query="""
+        SELECT * FROM readings
+        WHERE component_name = 'location'
+        ORDER BY time_received DESC
+        LIMIT 1
+        """,
     )
 
     viam_client.close()
-    return my_data[0]["data"]["readings"]
+
+    if not records:
+        return None
+
+    return records[0]   # ← THIS is what was missing
+
 
 
 if __name__ == "__main__":

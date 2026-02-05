@@ -6,10 +6,16 @@ import uuid
 
 async def collect():
     data = await get_latest_pgns()
-    print(data)
-    session = get_session()
+
+    if not data:
+        print("No data from Njord")
+        return
+
+    print("DATA FROM NJORD:", data)
 
     readings = data["data"]["readings"]
+
+    session = get_session()
 
     entry = BoatData(
         id=str(uuid.uuid4()),
