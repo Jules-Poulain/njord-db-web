@@ -1,12 +1,12 @@
 import asyncio
 from njordlink_query import get_latest_pgns
-from db import Session, BoatData
+from db import get_session, BoatData
 import uuid
 
 async def collect():
     data = await get_latest_pgns()
 
-    session = Session()
+    session = get_session()
 
     readings = data["readings"]
 
