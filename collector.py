@@ -1,6 +1,7 @@
 import asyncio
 from njordlink_query import get_latest_pgns
-from db import get_session, BoatData
+from db import get_session
+from models import BoatData
 import uuid
 
 async def collect():
