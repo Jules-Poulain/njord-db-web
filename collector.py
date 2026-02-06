@@ -4,6 +4,8 @@ from db import get_session
 from models import BoatData
 import uuid
 
+print("Collector.py started")
+
 async def collect():
     data = await get_latest_pgns()
 
@@ -46,3 +48,5 @@ if __name__ == "__main__":
         print("Data collection in progress...")
         asyncio.run(loop_collect())
         time.sleep(1)
+else:
+    print("Main loop not entered")
