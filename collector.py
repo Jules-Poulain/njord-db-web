@@ -40,4 +40,7 @@ async def loop_collect():
         await asyncio.sleep(60)  # collect every 60 seconds
 
 if __name__ == "__main__":
-    asyncio.run(loop_collect())
+    import time
+    while True:
+        asyncio.run(loop_collect())
+        time.sleep(1)
