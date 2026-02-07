@@ -1,8 +1,9 @@
-from sqlalchemy import Column, Float, String, DateTime
+from sqlalchemy import Column, Float, DateTime
 from sqlalchemy.dialects.postgresql import UUID
 from datetime import datetime
 import uuid
-from db import Base
+from database import Base
+
 
 class BoatData(Base):
     __tablename__ = "boat_data"

@@ -1,3 +1,9 @@
+from database import Base
+from db import engine
+import models
+
+Base.metadata.create_all(engine)
+
 from fastapi import FastAPI
 from njordlink_query import get_latest_pgns
 
