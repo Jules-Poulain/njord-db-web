@@ -1,5 +1,4 @@
 import asyncio
-from pprint import pprint
 
 from viam.rpc.dial import DialOptions, Credentials
 from viam.app.viam_client import ViamClient
@@ -32,8 +31,6 @@ async def get_latest_pgns():
         LIMIT 1
         """,
     )
-
-    viam_client.close()
 
     if not records:
         return None
