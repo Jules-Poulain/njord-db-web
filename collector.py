@@ -21,46 +21,23 @@ async def collect():
         print("No data from Njord")
         return
 
-    readings = data["data"]["readings"]
+    print("RAW VIAM DATA:", data)
 
-    pos = find_pgn(readings, "129029")
-    sogcog = find_pgn(readings, "129026")
-    speed = find_pgn(readings, "128259")
-    heading_data = find_pgn(readings, "127250")
-    wind = find_pgn(readings, "130306")
-
-    if not all([pos, sogcog, speed, heading_data, wind]):
-        print("Missing PGNs, skipping")
-        return
-
-    lat = pos["Latitude"]
-    lon = pos["Longitude"]
-
-    sog = sogcog["SOG"]
-    cog = sogcog["COG"]
-
-    stw = speed.get("Speed Water Referenced", 0)
-
-    heading = heading_data["Heading"]
-
-    tws = wind["Wind Speed"]
-    twa = wind["Wind Angle"]
-    twd = (heading + twa) % 360
-
-    print(f"LAT:{lat} LON:{lon} SOG:{sog} COG:{cog} STW:{stw} HDG:{heading} TWS:{tws} TWA:{twa} TWD:{twd}")
+    readings = data["data"]
 
     session = get_session()
 
     entry = BoatData(
-        lat=lat,
-        lon=lon,
-        sog=sog,
-        cog=cog,
-        stw=stw,
-        heading=heading,
-        tws=tws,
-        twa=twa,
-        twd=twd,
+        lat=readings.get("lat"),
+        lng=readings.get("lng"),
+        sog=readings.get("sog"),
+        cog=readings.get("cog"),
+        boatspeed=readings.get("boatspeed"),
+        heading=readings.get("heading"),
+        tws=readings.get("tws"),
+        twa=readings.get("twa"),
+        twd=readings.get("twd"),
+        raw=readings
     )
 
     session.add(entry)
