@@ -1,14 +1,18 @@
 print("Collector.py started")
 
-try:
-    import asyncio
-    from njordlink_query import get_latest_pgns
-    from db import get_session
-    from models import BoatData
-    import uuid
-except Exception as e:
-    print("IMPORT ERROR:", e)
-    raise
+import asyncio
+from njordlink_query import get_latest_pgns
+from db import get_session
+from models import BoatData
+import uuid
+
+
+def find_pgn(readings, prefix):
+    for k, v in readings.items():
+        if k.startswith(prefix):
+            return v
+    return None
+
 
 async def collect():
     data = await get_latest_pgns()
@@ -17,24 +21,52 @@ async def collect():
         print("No data from Njord")
         return
 
-    print("DATA FROM NJORD:", data)
-
     readings = data["data"]["readings"]
+
+    pos = find_pgn(readings, "129029")
+    sogcog = find_pgn(readings, "129026")
+    speed = find_pgn(readings, "128259")
+    heading_data = find_pgn(readings, "127250")
+    wind = find_pgn(readings, "130306")
+
+    if not all([pos, sogcog, speed, heading_data, wind]):
+        print("Missing PGNs, skipping")
+        return
+
+    lat = pos["Latitude"]
+    lon = pos["Longitude"]
+
+    sog = sogcog["SOG"]
+    cog = sogcog["COG"]
+
+    stw = speed.get("Speed Water Referenced", 0)
+
+    heading = heading_data["Heading"]
+
+    tws = wind["Wind Speed"]
+    twa = wind["Wind Angle"]
+    twd = (heading + twa) % 360
+
+    print(f"LAT:{lat} LON:{lon} SOG:{sog} COG:{cog} STW:{stw} HDG:{heading} TWS:{tws} TWA:{twa} TWD:{twd}")
 
     session = get_session()
 
     entry = BoatData(
-        id=str(uuid.uuid4()),
-        lat=readings["position"]["lat"],
-        lng=readings["position"]["lng"],
-        sog=readings["sog"],
-        cog=readings["cog"],
-        pgns=readings
+        lat=lat,
+        lon=lon,
+        sog=sog,
+        cog=cog,
+        stw=stw,
+        heading=heading,
+        tws=tws,
+        twa=twa,
+        twd=twd,
     )
 
     session.add(entry)
     session.commit()
     session.close()
+
 
 async def loop_collect():
     while True:
