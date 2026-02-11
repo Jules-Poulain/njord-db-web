@@ -1,5 +1,3 @@
-print("Collector.py started")
-
 import asyncio
 from njordlink_query import get_latest_pgns
 from db import get_session
@@ -77,6 +75,7 @@ async def collect():
 
 async def loop_collect():
     while True:
+        print("Collecting...")
         try:
             await collect()
         except Exception as e:
