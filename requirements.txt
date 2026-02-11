@@ -1,6 +1,6 @@
 annotated-doc==0.0.4
 annotated-types==0.7.0
-asyncio==4.12.1
+asyncio
 click==8.3.1
 dnspython==2.7.0
 fastapi==0.128.0
@@ -22,6 +22,6 @@ typing-inspection==0.4.2
 typing_extensions==4.15.0
 unicorn==2.1.4
 uvicorn==0.40.0
-viam-sdk==0.67.0
+viam-sdk
 psycopg2-binary
 sqlalchemy
