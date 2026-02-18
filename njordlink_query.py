@@ -2,10 +2,6 @@ import os
 from viam.rpc.dial import DialOptions, Credentials
 from viam.app.viam_client import ViamClient
 
-print("API_KEY_ID:", os.getenv("API_KEY_ID"))
-print("API_KEY_SECRET:", os.getenv("API_KEY_SECRET"))
-print("ORG_ID:", os.getenv("ORG_ID"))
-
 async def get_latest_pgns():
     dial_options = DialOptions(
         credentials=Credentials(
@@ -18,7 +14,7 @@ async def get_latest_pgns():
     viam_client = ViamClient.create_from_dial_options(dial_options)
 
     try:
-        data_client = viam_client.data_client
+        data_client = await viam_client.data_client()
 
         records = await data_client.tabular_data_by_sql(
             organization_id=os.getenv("ORG_ID"),
