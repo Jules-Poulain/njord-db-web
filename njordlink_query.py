@@ -12,7 +12,7 @@ async def get_latest_pgns():
     )
 
     print("Creating client...")
-    viam_client = ViamClient.create_from_dial_options(dial_options)
+    viam_client = await ViamClient.create_from_dial_options(dial_options)
     print("Client created:", viam_client)
 
     try:
