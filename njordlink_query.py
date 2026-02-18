@@ -39,5 +39,5 @@ async def get_latest_pgns():
 
     finally:
         print("Closing client...")
-        await viam_client.close()
+        viam_client.close()
         print("Closed.")
