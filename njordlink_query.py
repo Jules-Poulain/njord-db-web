@@ -17,7 +17,7 @@ async def get_latest_pgns():
 
     try:
         print("Getting data client...")
-        data_client = await viam_client.data_client()
+        data_client = viam_client.data_client
         print("Data client:", data_client)
 
         print("Running query...")
@@ -41,4 +41,3 @@ async def get_latest_pgns():
         print("Closing client...")
         await viam_client.close()
         print("Closed.")
-
